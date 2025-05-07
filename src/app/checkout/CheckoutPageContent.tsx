@@ -4,45 +4,56 @@
 
 import { useEffect, useState } from "react";
 import { Product } from "../types/Product";
+import { Order } from "../types/Order";
 
 export default function CheckoutPageContent({
-  productId,
+  orderId,
 }: {
-  productId?: string;
+  orderId?: string;
 }) {
-  const [product, setProduct] = useState<Product | null>(null);
+  const [order, setOrder] = useState<Order | null>(null);
 
   useEffect(() => {
-    if (productId) {
-      // Mock การดึงข้อมูลสินค้า (จริงๆ จะ fetch จาก backend ได้)
-      const products: Product[] = [
-        { id: "p1", name: "รองเท้า", price: 1500, image: "/images/shoes.jpg" },
-        { id: "p2", name: "กระเป๋า", price: 2000, image: "/images/bag.jpg" },
-      ];
+    // ✅ สร้าง async function ภายใน useEffect
+    const fetchOrder = async (id: string) => {
+      try {
+        const res = await fetch(`/api/orders/${id}`);
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data: Order = await res.json();
+        setOrder(data);
+      } catch (error) {
+        console.error("Error fetching product:", error);
+        setOrder(null);
+      }
+    };
 
-      const found = products.find((p) => p.id === productId);
-      setProduct(found ?? null);
+    if (orderId) {
+      fetchOrder(orderId); // ✅ เรียก async function ตรงนี้
+    } else {
+      setOrder(null);
     }
-  }, [productId]);
+  }, [orderId]);
 
-  if (!product) {
+  if (!order) {
     return <p>ไม่พบสินค้าที่เลือก</p>;
   }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`ทำการสั่งซื้อ ${product.name} เรียบร้อยแล้ว!`);
+    alert(`ทำการสั่งซื้อ ${order.product.name} เรียบร้อยแล้ว!`);
   };
 
   return (
     <div id="order-detail" className="">
-        <div className="flex justify-between">
-         <p>รายการคำสั่งซื้อที่ {}</p>
-         <div>
-            <p></p>
-            <p></p>
-         </div>
+      <div className="flex justify-between">
+        <p>รายการคำสั่งซื้อที่ {order.id}</p>
+        <div>
+          <p></p>
+          <p></p>
         </div>
+      </div>
     </div>
     // <form onSubmit={handleSubmit} className="space-y-6">
     //   <div className="flex items-center space-x-4">
@@ -97,6 +108,5 @@ export default function CheckoutPageContent({
     //     ยืนยันคำสั่งซื้อ
     //   </button>
     // </form>
-    
   );
 }

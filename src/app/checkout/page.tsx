@@ -6,9 +6,9 @@ import CheckoutPageContent from "./CheckoutPageContent";
 export default async function CheckoutPage({
   searchParams,
 }: {
-  searchParams: { productId?: string };
+  searchParams: { orderId?: string };
 }) {
-  const productId = await searchParams.productId;
+  const orderId = await searchParams.orderId;
 
   return (
     <div className="container mx-auto p-8">
@@ -17,7 +17,7 @@ export default async function CheckoutPage({
           <h2 className="text-3xl font-bold mb-6">รายละเอียดคำสั่งซื้อ</h2>
 
           <Suspense fallback={<p>กำลังโหลดสินค้า...</p>}>
-            <CheckoutPageContent productId={productId} />
+            <CheckoutPageContent orderId={orderId} />
           </Suspense>
         </div>
         <div className="col-span-2">
