@@ -2,6 +2,7 @@
 
 import { Suspense } from "react";
 import CheckoutPageContent from "./CheckoutPageContent";
+import CheckoutPagePayment from "./CheckoutPagePayment";
 
 export default async function CheckoutPage({
   searchParams,
@@ -21,7 +22,7 @@ export default async function CheckoutPage({
           </Suspense>
         </div>
         <div className="col-span-2">
-          <h2 className="text-2xl font-bold mb-4">สรุปรายการสั่งซื้อ</h2>
+          <CheckoutPagePayment />
         </div>
       </div>
     </div>

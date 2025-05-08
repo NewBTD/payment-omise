@@ -1,0 +1,156 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+declare global {
+  interface Window {
+    Omise: any;
+  }
+}
+
+export default function CreditPay() {
+  const [form, setForm] = useState({
+    name: "",
+    cardNumber: "",
+    expiryMonth: "",
+    expiryYear: "",
+    securityCode: "",
+  });
+  const [isOmiseReady, setOmiseReady] = useState(false);
+
+  // 1️⃣ โหลดสคริปต์ และตั้งค่า publicKey
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://cdn.omise.co/omise.js";
+    script.async = true;
+    script.onload = () => {
+      if (window.Omise) {
+        window.Omise.setPublicKey(
+          process.env.NEXT_PUBLIC_OMISE_PUBLIC_KEY!
+        );
+        setOmiseReady(true);
+        console.log("Omise.js loaded and public key set");
+      }
+    };
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const { name, cardNumber, expiryMonth, expiryYear, securityCode } = form;
+
+    // 2️⃣ ตรวจสอบว่าพร้อมสร้าง token หรือไม่
+    if (!isOmiseReady || !window.Omise?.createToken) {
+      alert("ระบบยังไม่พร้อม กรุณาลองใหม่อีกครั้ง");
+      return;
+    }
+
+    // เรียกสร้างโทเค็นผ่าน Omise.createToken
+    window.Omise.createToken(
+      "card",
+      {
+        name,
+        number: cardNumber,
+        expiration_month: expiryMonth,
+        expiration_year: expiryYear,
+        security_code: securityCode,
+      },
+      async (statusCode: number, response: any) => {
+        if (response.object === "error") {
+          alert("เกิดข้อผิดพลาด: " + response.message);
+          return;
+        }
+        const token = response.id;
+
+        // ส่งโทเค็นไป backend เพื่อสร้าง charge
+        const res = await fetch("/api/omise", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount: 100, token }),
+        });
+        const data = await res.json();
+
+        if (data.charge?.status === "successful") {
+          alert("ชำระเงินสำเร็จแล้ว!");
+        } else {
+          alert("ชำระเงินไม่สำเร็จ โปรดลองใหม่");
+        }
+      }
+    );
+  };
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-4 max-w-md mx-auto p-6 border rounded mt-10"
+    >
+      <h2 className="text-xl font-bold">ชำระเงินด้วยบัตรเครดิต</h2>
+
+      <input
+        type="text"
+        name="name"
+        placeholder="ชื่อบนบัตร"
+        value={form.name}
+        onChange={handleChange}
+        required
+        className="w-full border p-2 rounded"
+      />
+      <input
+        type="text"
+        name="cardNumber"
+        placeholder="หมายเลขบัตร"
+        value={form.cardNumber}
+        onChange={handleChange}
+        required
+        className="w-full border p-2 rounded"
+      />
+
+      <div className="flex space-x-2">
+        <input
+          type="text"
+          name="expiryMonth"
+          placeholder="เดือนหมดอายุ (MM)"
+          value={form.expiryMonth}
+          onChange={handleChange}
+          required
+          className="w-1/2 border p-2 rounded"
+        />
+        <input
+          type="text"
+          name="expiryYear"
+          placeholder="ปีหมดอายุ (YYYY)"
+          value={form.expiryYear}
+          onChange={handleChange}
+          required
+          className="w-1/2 border p-2 rounded"
+        />
+      </div>
+
+      <input
+        type="text"
+        name="securityCode"
+        placeholder="CVC"
+        value={form.securityCode}
+        onChange={handleChange}
+        required
+        className="w-full border p-2 rounded"
+      />
+
+      <button
+        type="submit"
+        disabled={!isOmiseReady}
+        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:bg-gray-400"
+      >
+        {isOmiseReady ? "ยืนยันการชำระเงิน" : "กำลังโหลด..."}
+      </button>
+    </form>
+  );
+}

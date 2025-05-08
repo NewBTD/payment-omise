@@ -6,11 +6,7 @@ import { useEffect, useState } from "react";
 import { Product } from "../types/Product";
 import { Order } from "../types/Order";
 
-export default function CheckoutPageContent({
-  orderId,
-}: {
-  orderId?: string;
-}) {
+export default function CheckoutPageContent({ orderId }: { orderId?: string }) {
   const [order, setOrder] = useState<Order | null>(null);
 
   useEffect(() => {
@@ -47,12 +43,35 @@ export default function CheckoutPageContent({
 
   return (
     <div id="order-detail" className="">
-      <div className="flex justify-between">
-        <p>รายการคำสั่งซื้อที่ {order.id}</p>
-        <div>
-          <p></p>
-          <p></p>
+      <div className="flex justify-between bg-gray-100 p-4 border rounded-t border-gray-300">
+        <p className="font-bold">รายการคำสั่งซื้อที่ {order.id}</p>
+        <div className="flex gap-4 items-center">
+          <p className="font-bold">{order.date}</p>
+          <p className="font-bold">เวลา {order.time}</p>
         </div>
+      </div>
+      <div className="grid grid-cols-5 gap-4 p-4 border-gray-300 px-8">
+        <div className="col-span-2">
+          <p className="text-sm text-[#8C8485] font-bold">ชื่อ</p>
+          <p>{order.fullName}</p>
+        </div>
+        <div className="col-span-3">
+          <p className="text-sm text-[#8C8485] font-bold">อีเมล</p>
+          <p>{order.email}</p>
+        </div>
+        <div className="col-span-2">
+          <p className="text-sm text-[#8C8485] font-bold">เบอร์โทรศัพท์</p>
+          <p>{order.phone}</p>
+        </div>
+        <div className="col-span-3">
+          <p className="text-sm text-[#8C8485] font-bold">ที่อยู่</p>
+          <p>{order.address}</p>
+        </div>
+        <div className="w-full h-[1px] bg-[#EDEDED] col-span-5"></div>
+      </div>
+      <div className="flex justify-between bg-gray-100 p-4 border rounded-b border-gray-300">
+        <p className="font-bold">รวมทั้งสิ้น</p>
+        <p className="font-bold">{order.net}</p>
       </div>
     </div>
     // <form onSubmit={handleSubmit} className="space-y-6">
