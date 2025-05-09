@@ -3,7 +3,7 @@ import QRCODE from "qrcode";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-export default function PromptpayPay() {
+export default function PromptpayPay({ amount }: { amount: number }) {
   const [qrUrl, setQrUrl] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -14,7 +14,7 @@ export default function PromptpayPay() {
         const res = await fetch("/api/promptpay", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ phoneNumber: "0620031879", amount: 1 }),
+          body: JSON.stringify({ phoneNumber: "0620031879", amount: amount }),
         });
         if (!res.ok) throw new Error(`Error: ${res.statusText}`);
         const data = await res.json();

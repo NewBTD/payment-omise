@@ -10,8 +10,10 @@ declare global {
 
 export default function CreditPay({
   setStatus,
+  amount,
 }: {
   setStatus: Dispatch<SetStateAction<boolean>>;
+  amount: number;
 }) {
   const [form, setForm] = useState({
     name: "",
@@ -19,6 +21,7 @@ export default function CreditPay({
     expiryMonth: "",
     expiryYear: "",
     securityCode: "",
+    amount: amount,
   });
   const [isOmiseReady, setOmiseReady] = useState(false);
 
@@ -47,7 +50,7 @@ export default function CreditPay({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { name, cardNumber, expiryMonth, expiryYear, securityCode } = form;
+    const { name, cardNumber, expiryMonth, expiryYear, securityCode, amount } = form;
 
     // 2️⃣ ตรวจสอบว่าพร้อมสร้าง token หรือไม่
     if (!isOmiseReady || !window.Omise?.createToken) {
@@ -76,7 +79,7 @@ export default function CreditPay({
         const res = await fetch("/api/omise", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ amount: 100, token }),
+          body: JSON.stringify({ amount: amount, token }),
         });
         const data = await res.json();
 
@@ -104,7 +107,7 @@ export default function CreditPay({
         onChange={handleChange}
         max="16"
         required
-        className="w-full border p-2 rounded"
+        className="w-full border-2 border-[#D2CFD0] p-2 rounded"
       />
       <input
         type="text"
@@ -113,7 +116,7 @@ export default function CreditPay({
         value={form.name}
         onChange={handleChange}
         required
-        className="w-full border p-2 rounded"
+        className="w-full border-2 border-[#D2CFD0] p-2 rounded"
       />
 
       <div className="flex space-x-2">
@@ -124,7 +127,7 @@ export default function CreditPay({
           value={form.expiryMonth}
           onChange={handleChange}
           required
-          className="w-1/2 border p-2 rounded"
+          className="w-1/2 border-2 border-[#D2CFD0] p-2 rounded"
         />
         <input
           type="text"
@@ -133,7 +136,7 @@ export default function CreditPay({
           value={form.expiryYear}
           onChange={handleChange}
           required
-          className="w-1/2 border p-2 rounded"
+          className="w-1/2 border-2 border-[#D2CFD0] p-2 rounded"
         />
       </div>
 
@@ -144,7 +147,7 @@ export default function CreditPay({
         value={form.securityCode}
         onChange={handleChange}
         required
-        className="w-full border p-2 rounded"
+        className="w-full border-2 border-[#D2CFD0] p-2 rounded"
       />
 
       <button

@@ -1,3 +1,4 @@
+
 // app/checkout/page.tsx
 
 import { Suspense } from "react";
@@ -22,7 +23,7 @@ export default async function CheckoutPage({
           </Suspense>
         </div>
         <div className="col-span-2">
-          <CheckoutPagePayment />
+          <CheckoutPagePayment orderId={orderId} />
         </div>
       </div>
     </div>

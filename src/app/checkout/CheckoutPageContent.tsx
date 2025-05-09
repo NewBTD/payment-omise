@@ -36,10 +36,6 @@ export default function CheckoutPageContent({ orderId }: { orderId?: string }) {
     return <p>ไม่พบสินค้าที่เลือก</p>;
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    alert(`ทำการสั่งซื้อ ${order.product.name} เรียบร้อยแล้ว!`);
-  };
 
   return (
     <div id="order-detail" className="">
