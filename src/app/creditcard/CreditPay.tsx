@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 declare global {
   interface Window {
@@ -8,7 +8,11 @@ declare global {
   }
 }
 
-export default function CreditPay() {
+export default function CreditPay({
+  setStatus,
+}: {
+  setStatus: Dispatch<SetStateAction<boolean>>;
+}) {
   const [form, setForm] = useState({
     name: "",
     cardNumber: "",
@@ -25,9 +29,7 @@ export default function CreditPay() {
     script.async = true;
     script.onload = () => {
       if (window.Omise) {
-        window.Omise.setPublicKey(
-          process.env.NEXT_PUBLIC_OMISE_PUBLIC_KEY!
-        );
+        window.Omise.setPublicKey(process.env.NEXT_PUBLIC_OMISE_PUBLIC_KEY!);
         setOmiseReady(true);
         console.log("Omise.js loaded and public key set");
       }
@@ -80,6 +82,7 @@ export default function CreditPay() {
 
         if (data.charge?.status === "successful") {
           alert("ชำระเงินสำเร็จแล้ว!");
+          setStatus(true);
         } else {
           alert("ชำระเงินไม่สำเร็จ โปรดลองใหม่");
         }
@@ -109,6 +112,7 @@ export default function CreditPay() {
         placeholder="หมายเลขบัตร"
         value={form.cardNumber}
         onChange={handleChange}
+        max="16"
         required
         className="w-full border p-2 rounded"
       />
@@ -147,7 +151,7 @@ export default function CreditPay() {
       <button
         type="submit"
         disabled={!isOmiseReady}
-        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:bg-gray-400"
+        className="w-full bg-[#E69806] hover:opacity-80 cursor-pointer font-bold text-white py-2 rounded  disabled:bg-gray-400"
       >
         {isOmiseReady ? "ยืนยันการชำระเงิน" : "กำลังโหลด..."}
       </button>

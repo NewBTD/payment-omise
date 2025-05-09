@@ -13,7 +13,7 @@ export default async function CheckoutPage({
 
   return (
     <div className="container mx-auto p-8">
-      <div className="grid grid-cols-5">
+      <div className="grid grid-cols-5 gap-4">
         <div className="col-span-3">
           <h2 className="text-3xl font-bold mb-6">รายละเอียดคำสั่งซื้อ</h2>
 
