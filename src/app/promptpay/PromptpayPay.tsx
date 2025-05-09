@@ -69,6 +69,10 @@ export default function PromptpayPay({ amount }: { amount: number }) {
               alt="PromptPay QR"
               className="mt-4 w-64 h-64"
             />
+            <button
+              type="submit"
+              className="w-full bg-[#E69806] hover:opacity-80 cursor-pointer font-bold text-white py-2 rounded  disabled:bg-gray-400 mt-2 mb-4"
+            >ยืนยันการชำระเงิน</button>
             <p className="text-sm text-[#A6A0A1]">
               ข้อมูลที่ระบุในคำสั่งซื้อนี้ของคุณ จะถูกนำไปสนับสนุนการพัฒนา
               บริการ และการใช้งานเว็บไซต์ของเรา
