@@ -58,7 +58,7 @@ const CheckoutPagePayment = ({ orderId }: { orderId?: string }) => {
           <h2 className="text-[32px] font-bold mb-4">การชำระเงิน</h2>
           <div className="grid grid-cols-6 gap-2 my-2">
             {/* wrapper ต้องเป็น relative และยืดเต็มความสูง */}
-            <div className="col-span-1 relative h-full rounded overflow-hidden">
+            <div className="col-span-1 relative aspect-square rounded overflow-hidden">
               <Image
                 src={order.product.images[0]}
                 alt={order.product.description}
@@ -75,7 +75,7 @@ const CheckoutPagePayment = ({ orderId }: { orderId?: string }) => {
             </div>
           </div>
 
-          <div className="bg-[#FFFFF7] px-6 py-2 rounded-2xl my-4">
+          <div className="bg-[#FFFFF7] px-6 py-4 rounded-2xl my-4">
             <p className="mb-4 text-[#8C8485]">ช่องทางการชำระเงิน</p>
             {/* Radio Button เลือกรูปแบบการชำระเงิน */}
             <div className="mb-6 space-y-2 flex items-center gap-4">

@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 import { Product } from "../types/Product";
 import { Order } from "../types/Order";
+import Image from "next/image";
 
 export default function CheckoutPageContent({ orderId }: { orderId?: string }) {
   const [order, setOrder] = useState<Order | null>(null);
@@ -36,10 +37,9 @@ export default function CheckoutPageContent({ orderId }: { orderId?: string }) {
     return <p>ไม่พบสินค้าที่เลือก</p>;
   }
 
-
   return (
-    <div id="order-detail" className="">
-      <div className="flex justify-between bg-gray-100 p-4 border rounded-t border-gray-300">
+    <div id="order-detail" className="border rounded-2xl border-gray-300">
+      <div className="flex justify-between p-4 border-b border-gray-300">
         <p className="font-bold">รายการคำสั่งซื้อที่ {order.id}</p>
         <div className="flex gap-4 items-center">
           <p className="font-bold">{order.date}</p>
@@ -65,9 +65,27 @@ export default function CheckoutPageContent({ orderId }: { orderId?: string }) {
         </div>
         <div className="w-full h-[1px] bg-[#EDEDED] col-span-5"></div>
       </div>
-      <div className="flex justify-between bg-gray-100 p-4 border rounded-b border-gray-300">
+      <div className="grid grid-cols-6 gap-2 my-2 px-8 bg-[#FFFFF7]">
+        {/* wrapper ต้องเป็น relative และยืดเต็มความสูง */}
+        <div className="col-span-1 relative aspect-square rounded overflow-hidden">
+          <Image
+            src={order.product.images[0]}
+            alt={order.product.description}
+            fill // ให้ Image ขยายเต็ม container
+            style={{ objectFit: "cover" }} // ให้รูปครอบเต็มโดยไม่เสียอัตราส่วน
+          />
+        </div>
+        <div className="col-span-5 py-4">
+          <p className="font-bold">{order.product.name}</p>
+          <div className="flex justify-between">
+            <p>X1</p>
+            <p>{order.net}</p>
+          </div>
+        </div>
+      </div>
+      <div className="flex justify-between p-4 border-t">
         <p className="font-bold">รวมทั้งสิ้น</p>
-        <p className="font-bold">{order.net}</p>
+        <p className="font-bold">{order.net} บาท</p>
       </div>
     </div>
     // <form onSubmit={handleSubmit} className="space-y-6">
