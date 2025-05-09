@@ -33,7 +33,7 @@ export default function PromptpayPay() {
   }, []);
 
   return (
-    <div className="p-6 flex justify-center">
+    <div className="flex flex-col items-center justify-center">
       {loading ? (
         <div className="flex items-center justify-center">
           <svg
@@ -60,7 +60,25 @@ export default function PromptpayPay() {
       ) : error ? (
         <p className="text-red-500">Error: {error}</p>
       ) : (
-        qrUrl && <Image src={qrUrl} width={256} height={256} alt="PromptPay QR" className="mt-4 w-64 h-64" />
+        qrUrl && (
+          <>
+            <Image
+              src={qrUrl}
+              width={256}
+              height={256}
+              alt="PromptPay QR"
+              className="mt-4 w-64 h-64"
+            />
+            <p className="text-sm text-[#A6A0A1]">
+              ข้อมูลที่ระบุในคำสั่งซื้อนี้ของคุณ จะถูกนำไปสนับสนุนการพัฒนา
+              บริการ และการใช้งานเว็บไซต์ของเรา
+              เพื่อให้ประสบการณ์การใช้งานของคุณดียิ่งขึ้นท่านสามารถอ่านรายละเอียดเพิ่มเติมได้ที่{" "}
+              <a href="" className="underline text-[#E69806] hover:opacity-90">
+                นโยบายความเป็นส่วนตัว{" "}
+              </a>
+            </p>
+          </>
+        )
       )}
     </div>
   );

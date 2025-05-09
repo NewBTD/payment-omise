@@ -93,26 +93,25 @@ export default function CreditPay({
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-4 max-w-md mx-auto p-6 border rounded mt-10"
+      className="space-y-4 max-w-md mx-auto rounded"
     >
-      <h2 className="text-xl font-bold">ชำระเงินด้วยบัตรเครดิต</h2>
-
+      <label htmlFor="">หมายเลขบัตร</label>
+      <input
+        type="text"
+        name="cardNumber"
+        placeholder="1234  5678  9101  1121"
+        value={form.cardNumber}
+        onChange={handleChange}
+        max="16"
+        required
+        className="w-full border p-2 rounded"
+      />
       <input
         type="text"
         name="name"
         placeholder="ชื่อบนบัตร"
         value={form.name}
         onChange={handleChange}
-        required
-        className="w-full border p-2 rounded"
-      />
-      <input
-        type="text"
-        name="cardNumber"
-        placeholder="หมายเลขบัตร"
-        value={form.cardNumber}
-        onChange={handleChange}
-        max="16"
         required
         className="w-full border p-2 rounded"
       />
@@ -155,6 +154,14 @@ export default function CreditPay({
       >
         {isOmiseReady ? "ยืนยันการชำระเงิน" : "กำลังโหลด..."}
       </button>
+      <p className="text-sm text-[#A6A0A1]">
+        ข้อมูลที่ระบุในคำสั่งซื้อนี้ของคุณ จะถูกนำไปสนับสนุนการพัฒนา บริการ
+        และการใช้งานเว็บไซต์ของเรา
+        เพื่อให้ประสบการณ์การใช้งานของคุณดียิ่งขึ้นท่านสามารถอ่านรายละเอียดเพิ่มเติมได้ที่{" "}
+        <a href="" className="underline text-[#E69806] hover:opacity-90">
+          นโยบายความเป็นส่วนตัว{" "}
+        </a>
+      </p>
     </form>
   );
 }
